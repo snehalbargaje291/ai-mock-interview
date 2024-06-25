@@ -1,13 +1,12 @@
 import React from 'react'
-import { Header } from './_components/Header'
+import Header  from './_components/Header'
 
-function DashboardLayout({children}) {
+export default function DashboardLayout({children}) {
   return (
-    <>
-      {/* <Header/> */}
-      {children}
-    </>
+    <div>
+      <Header/>
+      <main>{children}</main>
+    </div>
   )
 }
 
-export default DashboardLayout
