@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion"
 import {
   Dialog,
   DialogClose,
@@ -21,6 +22,8 @@ import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
 import moment from "moment/moment";
 import { db } from "@/utils/db";
+import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
 function AddNewInterview() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -31,6 +34,7 @@ function AddNewInterview() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [jsonResp, setJsonResp] = useState([]);
+  const router = useRouter();
   const { user } = useUser();
 
   const handleChange = (e) => {
@@ -43,42 +47,43 @@ function AddNewInterview() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(
-      "Form Data:",
-      formData.position,
-      formData.jobDescription,
-      formData.experience
-    );
     const InputPrompt = `Based on the position of ${formData.position} with ${formData.experience} years of experience in ${formData.jobDescription}, provide ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTIONS_COUNT} appropriate and relevant interview questions along with their expected answers in JSON format. Each question and its corresponding answer should be included as fields in the JSON structure.`;
     const result = await chatSession.sendMessage(InputPrompt);
     const MockJsonResponse = result.response
       .text()
       .replace("```json", "")
       .replace("```", "");
-    console.log("MockJsonResponse:", MockJsonResponse);
-    setJsonResp(MockJsonResponse);
 
-    if (MockJsonResponse) {
-      const resp = await db
-        .insert(MockInterview)
-        .values({
-          mockId: uuidv4(),
-          jsonMockResp: MockJsonResponse,
-          jobPosition: formData.position,
-          jobDesc: formData.jobDescription,
-          jobExperience: formData.experience,
-          createdBy: user?.primaryEmailAddress?.emailAddress,
-          createdAt: moment().format("DD-MM-YYYY"),
-        })
-        .returning({ mockId: MockInterview.mockId });
+    try {
+      const jsonMockRespArray = JSON.parse(MockJsonResponse);
+      setJsonResp(jsonMockRespArray);
 
-      console.log("Response:", resp);
-      if (resp) {
-        setIsDialogOpen(false); // Close the dialog box
+      if (jsonMockRespArray) {
+        const resp = await db
+          .insert(MockInterview)
+          .values({
+            mockId: uuidv4(),
+            jsonMockResp: MockJsonResponse,
+            jobPosition: formData.position,
+            jobDesc: formData.jobDescription,
+            jobExperience: formData.experience,
+            createdBy: user?.primaryEmailAddress?.emailAddress,
+            createdAt: moment().format("DD-MM-YYYY"),
+          })
+          .returning({ mockId: MockInterview.mockId });
+
+        if (resp) {
+          setIsDialogOpen(false);
+          router.push("/dashboard/interview/" + resp[0]?.mockId);
+        }
       }
-    } else {
-      console.log("Error:", "Empty response from AI");
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      toast.error(
+        "Failed to generate valid interview questions. Please try again."
+      );
     }
+
     setIsLoading(false);
   };
 
@@ -86,13 +91,16 @@ function AddNewInterview() {
     <>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <div
-            className="p-5 border rounded-lg bg-secondary hover:scale-105 hover:shadow-md cursor-pointer transition-all flex justify-center items-center"
+          <motion.div
+          whileHover={{ scale: 0.9 }}
+          whileTap={{ scale: 1.1}}
+            className="p-5 border rounded-lg bg-secondary shadow-lg cursor-pointer transition-all flex justify-center items-center"
             onClick={() => setIsDialogOpen(true)}
           >
             <h1 className="text-sm">+ Create New</h1>
-          </div>
+          </motion.div>
         </DialogTrigger>
+        <Toaster position="top-right" reverseOrder={false} />
         <DialogContent className="w-[100%] h-[100%] md:h-auto md:w-auto p-6 md:rounded-lg overflow-auto">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-900">
@@ -125,7 +133,7 @@ function AddNewInterview() {
                 htmlFor="jobDescription"
                 className="text-sm font-medium text-gray-700"
               >
-                Job Description
+                Job Description/ Tech Stack
               </Label>
               <Textarea
                 id="jobDescription"
@@ -161,7 +169,7 @@ function AddNewInterview() {
               <Button
                 disabled={isLoading}
                 type="submit"
-                className="bg-blue-600  text-white hover:bg-blue-700"
+                className="bg-blue-600 text-white hover:bg-blue-700"
               >
                 {isLoading ? (
                   <>
@@ -175,7 +183,7 @@ function AddNewInterview() {
               <DialogClose asChild>
                 <Button
                   type="button"
-                  className="border bg-white  border-gray-300 text-gray-700 hover:bg-gray-100"
+                  className="border bg-white border-gray-300 text-gray-700 hover:bg-gray-100"
                 >
                   Close
                 </Button>

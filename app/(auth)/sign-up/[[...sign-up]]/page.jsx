@@ -5,10 +5,10 @@ import { motion } from "framer-motion"
 export default function Page() {
   return(
 <motion.div
-      initial={{ x: "-100vw" }} // Start position: off-screen to the left
-      animate={{ x: 0 }} // End position: centered
-      transition={{ type: "spring", stiffness: 50 }} // Animation type and properties
-      className="bg-white flex items-center justify-center min-h-screen"
+      initial={{ x: "-100vw" }} 
+      animate={{ x: 0 }} 
+      transition={{ type: "spring", stiffness: 50 }} 
+      className="flex mt-10 justify-center"
     >
       <SignUp path="/sign-up" />
     </motion.div>

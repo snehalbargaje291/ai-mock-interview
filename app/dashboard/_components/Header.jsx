@@ -3,15 +3,16 @@ import { UserButton } from "@clerk/nextjs";
 import React, { useState, useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const controls = useAnimation();
   const path = usePathname();
 
-  useEffect(() => {
-    console.log(path);
-  });
+  // useEffect(() => {
+  //   console.log(path);
+  // });
   const handleScroll = () => {
     if (window.scrollY > 50) {
       controls.start({
@@ -63,35 +64,34 @@ function Header() {
     <>
       <motion.header
         initial={{ opacity: 1 }}
-        // animate={{ opacity: window.innerWidth < 768 ? controls : 1 }}
-        className="fixed top-0 left-0 w-full z-50 backdrop-blur-md border-b border-gray-300 "
+        className="fixed shadow-lg top-0 left-0 w-full z-50 backdrop-blur-md border-b border-gray-300 "
       >
         <div className="container flex justify-between items-center px-8 py-4 m-auto">
-          <h1 className="text-xl font-bold text-black">Mockstar.ai</h1>
+          <Link href={'/'}><h1 className="text-xl font-bold text-black">Mockstar.ai</h1></Link>
           <nav className="hidden md:flex space-x-8 justify-between">
             <ul className="flex space-x-6 pt-1">
-              <li
+            <Link href={'/dashboard'}><li 
                 className={`${
                   path == "/dashboard" && "text-gray-600 font-bold"
                 } text-black cursor-pointer text-sm hover:text-gray-400 hover:font-bold transition-all`}
               >
                 Dashboard
-              </li>
-              <li
+              </li></Link>
+              <Link href={'/questions'}><li
                 className={`${
                   path == "/questions" && "text-gray-600 font-bold"
                 } text-black cursor-pointer text-sm hover:text-gray-400 hover:font-bold transition-all`}
               >
                 Questions
-              </li>
-              <li
+              </li></Link>
+              <Link href={'/howitworks'}><li
                 className={`${
                   path == "/howitworks" && "text-gray-600 font-bold"
                 } text-black cursor-pointer text-sm hover:text-gray-400 hover:font-bold transition-all`}
               >
                 How it works?
-              </li>
-              <li><UserButton /></li>
+              </li></Link>
+              <li className="scale-125"><UserButton /></li>
             </ul>
             
           </nav>
@@ -123,31 +123,34 @@ function Header() {
             className="md:hidden backdrop-blur-md flex justify-center items-center"
           >
             <ul className="flex flex-col space-y-4 gap-2 p-4 w-[100%]">
-              <motion.li
+            <Link href={'/dashboard'}><motion.li
                 variants={itemVariants}
+                onClick={() => setIsOpen(!isOpen)}
                 className={`${
                   path == "/dashboard" && "text-gray-600 font-bold"
                 } block hover:font-bold text-black text-center hover:text-gray-400 transition duration-300`}
               >
                 Dashboard
-              </motion.li>
-              <motion.li
+              </motion.li></Link>
+              <Link href={'/questions'}><motion.li
                 variants={itemVariants}
+                onClick={() => setIsOpen(!isOpen)}
                 className={`${
                   path == "/questions" && "text-gray-600 font-bold"
                 } block hover:font-bold text-black text-center hover:text-gray-400 transition duration-300`}
               >
                 Questions
-              </motion.li>
-              <motion.li
+              </motion.li></Link>
+              <Link href={'/howitworks'}><motion.li
                 variants={itemVariants}
+                onClick={() => setIsOpen(!isOpen)}
                 className={`${
                   path == "/howitworks" && "text-gray-600 font-bold"
                 } block hover:font-bold text-black text-center hover:text-gray-400 transition duration-300`}
               >
                 How it works?
-              </motion.li>
-              <motion.li variants={itemVariants} className="text-center">
+              </motion.li></Link>
+              <motion.li variants={itemVariants} className="text-center scale-125">
                 <UserButton />
               </motion.li>
             </ul>

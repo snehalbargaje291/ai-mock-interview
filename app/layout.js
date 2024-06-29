@@ -5,8 +5,10 @@ import {
   SignInButton,
   SignedIn,
   SignedOut,
-  UserButton
-} from '@clerk/nextjs'
+  UserButton,
+} from "@clerk/nextjs";
+import { GridBackground } from "@/components/ui/background";
+// import Header from "./dashboard/_components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +21,13 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <GridBackground />
+          <div className="absolute inset-0 z-10">
+            {/* <Header /> */}
+              {children}
+          </div>
+        </body>
       </html>
     </ClerkProvider>
   );
