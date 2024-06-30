@@ -73,15 +73,24 @@ function AddNewInterview() {
           .returning({ mockId: MockInterview.mockId });
 
         if (resp) {
+          toast.success(
+            "Interview created successfully!"
+          );
           setIsDialogOpen(false);
           router.push("/dashboard/interview/" + resp[0]?.mockId);
         }
       }
     } catch (error) {
+      setIsDialogOpen(false)
       console.error("Error parsing JSON:", error);
       toast.error(
         "Failed to generate valid interview questions. Please try again."
       );
+      setFormData({
+        position: "",
+        jobDescription: "",
+        experience: "",
+      });
     }
 
     setIsLoading(false);
@@ -100,7 +109,7 @@ function AddNewInterview() {
             <h1 className="text-sm">+ Create New</h1>
           </motion.div>
         </DialogTrigger>
-        <DialogContent className="w-[100%] h-[100%] md:h-auto md:w-auto p-6 md:rounded-lg overflow-auto">
+        <DialogContent className="w-[90%] h-auto md:w-auto p-6 rounded-lg overflow-auto">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-900">
               New Mock Interview

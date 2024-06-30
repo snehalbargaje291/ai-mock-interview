@@ -22,12 +22,12 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={`${inter.className} relative`}>
           <GridBackground />
-          <div className="absolute inset-0 z-10">
+          <div className="relative z-10">
             {/* <Header /> */}
             <Toaster position="top-right" reverseOrder={false} />
-              {children}
+            {children}
           </div>
         </body>
       </html>

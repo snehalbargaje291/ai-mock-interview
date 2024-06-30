@@ -17,7 +17,7 @@ function RecordAnswers({ interviewData, activeQuestionIndex, mockInterviewQuesti
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useUser();
   const [recorded, setRecorded] = useState(false);
-  
+
   const {
     error,
     interimResult,
@@ -82,11 +82,9 @@ function RecordAnswers({ interviewData, activeQuestionIndex, mockInterviewQuesti
       toast.error('Error while saving answer, Please try again');
     } finally {
       setIsLoading(false);
-      console.log(userAnswer)
       setUserAnswer('');
-      setResults([])
+      setResults([]);
     }
-    setResults([])
   };
 
   const startStopRecordingAnswer = () => {
@@ -131,7 +129,7 @@ function RecordAnswers({ interviewData, activeQuestionIndex, mockInterviewQuesti
           </div>
         )}
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-1 lg:gap-4">
         <Button onClick={startStopRecordingAnswer} disabled={isLoading} className="mb-4 w-full bg-black text-white px-6 py-2 rounded-lg text-sm">
           {isRecording && webCamEnable ? (
             <p className="text-red-500 flex flex-row font-bold gap-2">
@@ -144,10 +142,10 @@ function RecordAnswers({ interviewData, activeQuestionIndex, mockInterviewQuesti
           )}
         </Button>
         <Link href={'./feedback'}>
-        <Button className="bg-black w-full text-white px-6 py-2 rounded-lg text-sm">
-          End Interview
-        </Button>
-        </Link> 
+          <Button className="bg-black w-full text-white px-6 py-2 rounded-lg text-sm">
+            End Interview
+          </Button>
+        </Link>
       </div>
     </div>
   );
