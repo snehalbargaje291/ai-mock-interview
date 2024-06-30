@@ -40,7 +40,7 @@ function StartInterview({ params }) {
     whileInView={{ opacity: 1 }}
     viewport={{ once: true }}>
     <div className="flex flex-col-reverse md:flex-row p-4 rounded-lg md:rounded-none border md:border-none shadow-lg md:shadow-none mb-4">
-      <RecordAnswers/>
+      <RecordAnswers mockInterviewQuestions={mockInterviewQuestion} activeQuestionIndex={activeQuestionIndex} interviewData={interviewData}/>
       <QuestionsSection mockInterviewQuestions={mockInterviewQuestion} activeQuestionIndex={activeQuestionIndex} setActiveQuestionIndex={setActiveQuestionIndex}/>
     </div>
     <div className="bg-blue-100 p-4 rounded-lg shadow-lg">

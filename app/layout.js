@@ -8,6 +8,7 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import { GridBackground } from "@/components/ui/background";
+import { Toaster } from "react-hot-toast";
 // import Header from "./dashboard/_components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
           <GridBackground />
           <div className="absolute inset-0 z-10">
             {/* <Header /> */}
+            <Toaster position="top-right" reverseOrder={false} />
               {children}
           </div>
         </body>

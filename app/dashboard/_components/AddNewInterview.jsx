@@ -23,7 +23,7 @@ import { useUser } from "@clerk/nextjs";
 import moment from "moment/moment";
 import { db } from "@/utils/db";
 import { useRouter } from "next/navigation";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 function AddNewInterview() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -100,7 +100,6 @@ function AddNewInterview() {
             <h1 className="text-sm">+ Create New</h1>
           </motion.div>
         </DialogTrigger>
-        <Toaster position="top-right" reverseOrder={false} />
         <DialogContent className="w-[100%] h-[100%] md:h-auto md:w-auto p-6 md:rounded-lg overflow-auto">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gray-900">

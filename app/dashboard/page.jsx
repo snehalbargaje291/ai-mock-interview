@@ -11,7 +11,7 @@ function Dashboard() {
       viewport={{ once: true }}
     >
       <h1 className="font-bold text-lg">Dashboard</h1>
-      <h4 className="text-gray-500 text-sm">
+      <h4 className="text-gray-500 text-md">
         Create and start your AI Mock Interview!
       </h4>
       <div className="grid grid-cols-1 md:grid-cols-4 my-5">
