@@ -51,7 +51,7 @@ function InterviewList() {
               description={interview.jobDesc}
               yearsOfExp={interview.jobExperience}
               createdAt={interview.createdAt}
-              interview={interview.mockId}
+              interviewId={interview.mockId}
             />
           ))
         ) : (

@@ -4,12 +4,9 @@ import { Volume2Icon } from "lucide-react";
 
 function QuestionsSection({
   mockInterviewQuestions,
-  activeQuestionIndex,
-  setActiveQuestionIndex,
+  activeQuestionIndex
 }) {
-  const handleClick = (index) => {
-    setActiveQuestionIndex(index);
-  };
+  
   const textToSpeech = (text) => {
     if ("speechSynthesis" in window) {
       const textToSpeech = new SpeechSynthesisUtterance(text);
@@ -30,7 +27,6 @@ function QuestionsSection({
                   className={`text-sm text-gray-600 ${
                     activeQuestionIndex === index ? "font-bold" : ""
                   }`}
-                  onClick={() => handleClick(index)}
                 >
                   Question #{index + 1}
                 </button>

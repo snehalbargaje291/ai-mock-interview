@@ -38,9 +38,9 @@ function Interview({ params }) {
     viewport={{ once: true }} className="flex flex-col justify-center items-center p-4 md:p-8">
       <h1 className="mb-6 font-bold text-xl text-gray-900">Start Interview</h1>
 
-      <div className="rounded-lg border bg-white py-6 px-4 md:px-8 lg:w-[80%] shadow-lg">
+      <div className="rounded-lg border bg-white py-6 px-4 md:px-8 shadow-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="flex justify-center items-center">
+        {/* <div className="flex justify-center items-center">
           {webCamEnable ? (
             <Webcam 
               onUserMedia={() => setWebCamEnable(true)}
@@ -54,7 +54,7 @@ function Interview({ params }) {
               <Button onClick={() => setWebCamEnable(true)} variant="ghost" className="text-gray-400 px-2 py-2 rounded-lg hover:bg-gray-400">Enable Webcam and Microphone</Button>
             </div>
           )}
-        </div>
+        </div> */}
         <div className="flex flex-col gap-4">
           {interviewData && Object.keys(interviewData).length > 0 ? (
             <>
