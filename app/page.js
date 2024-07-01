@@ -1,12 +1,16 @@
 "use client";
-import { FlipWords } from "@/components/ui/flip-word";
+// import { FlipWords } from "@/components/ui/flip-word";
+import { HeroParallax } from "@/components/ui/hero-parallax";
 import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 
 function Home() {
   const { isSignedIn } = useUser();
-  const words = ["better", "cute", "beautiful", "modern"];
+  // const words = ["better", "cute", "beautiful", "modern"];
+  const products = [
+    { title: 'Product 1', link: '/product-1', thumbnail: '/product-1-thumbnail.jpg' },
+  ];
 
   return (
     <>
@@ -24,7 +28,7 @@ function Home() {
           </Link>
         )}
       </div>
-      <div className="h-[40rem] flex justify-center items-center">
+      {/* <div className="h-[40rem] flex justify-center items-center">
         <div className="text-4xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
           Build
           <FlipWords words={words} /> <br />
@@ -36,6 +40,9 @@ function Home() {
             </button>
           </Link>
         </div>
+      </div> */}
+      <div>
+        <HeroParallax products={products}/>
       </div>
     </>
   );
