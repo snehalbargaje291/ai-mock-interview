@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import Webcam from "react-webcam";
 import { Mic, WebcamIcon, Loader } from "lucide-react";
@@ -10,12 +11,19 @@ import { useUser } from "@clerk/nextjs";
 import moment from "moment";
 import { db } from "@/utils/db";
 import Link from "next/link";
+import QuestionsSection from "./QuestionsSection";
 
 function RecordAnswers({
   interviewData,
   activeQuestionIndex,
   mockInterviewQuestions,
-  setActiveQuestionIndex
+  setActiveQuestionIndex,
+  error,
+  isRecording,
+  results,
+  setResults,
+  startSpeechToText,
+  stopSpeechToText,
 }) {
   const [webCamEnable, setWebCamEnable] = useState(false);
   const [userAnswer, setUserAnswer] = useState("");
@@ -23,17 +31,8 @@ function RecordAnswers({
   const { user } = useUser();
   const [recorded, setRecorded] = useState(false);
 
-  const {
-    error,
-    isRecording,
-    results,
-    setResults,
-    startSpeechToText,
-    stopSpeechToText,
-  } = useSpeechToText({
-    continuous: true,
-    useLegacyResults: false,
-  });
+
+
 
   useEffect(() => {
     if (results.length > 0) {
@@ -113,74 +112,80 @@ function RecordAnswers({
   if (error) return <p>Web Speech API is not available in this browser 🤷‍</p>;
 
   if (!mockInterviewQuestions) return null;
-  console.log(recorded, setRecorded)
+
   return (
-    <div className="flex flex-col lg:w-[50%] bg-white p-4 md:rounded-lg md:border md:shadow-md mb-4 md:mb-0 md:mr-4">
-      <div className="flex justify-center items-center mb-4">
-        {webCamEnable ? (
-          <Webcam
-            onUserMedia={() => setWebCamEnable(true)}
-            onUserMediaError={() => setWebCamEnable(false)}
-            mirrored={true}
-            style={{ height: 250, width: "100%" }}
-          />
-        ) : (
-          <div className="flex flex-col justify-center items-center gap-4">
-            <div className="w-40 h-40 flex justify-center items-center">
-              <WebcamIcon className="w-20 h-20 text-gray-400" />
+    <>
+      <div className="flex flex-col lg:w-[50%] bg-white p-4 md:rounded-lg md:border md:shadow-md mb-4 md:mb-0 md:mr-4">
+        <div className="flex justify-center items-center mb-4">
+          {webCamEnable ? (
+            <Webcam
+              onUserMedia={() => setWebCamEnable(true)}
+              onUserMediaError={() => setWebCamEnable(false)}
+              mirrored={true}
+              style={{ height: 250, width: "100%" }}
+            />
+          ) : (
+            <div className="flex flex-col justify-center items-center gap-4">
+              <div className="w-40 h-40 flex justify-center items-center">
+                <WebcamIcon className="w-20 h-20 text-gray-400" />
+              </div>
+              <Button
+                onClick={() => setWebCamEnable(true)}
+                variant="ghost"
+                className="px-4 py-2 rounded-lg text-sm"
+              >
+                {!webCamEnable && (
+                  <p className="text-red-500 text-sm">
+                    Enable webcam to record.
+                  </p>
+                )}
+              </Button>
             </div>
+          )}
+        </div>
+        <div className="grid md:grid-cols-2 gap-1 lg:gap-4">
+          <Button
+            onClick={startStopRecordingAnswer}
+            disabled={isLoading}
+            className="mb-4 w-full bg-black text-white px-6 py-2 rounded-lg text-sm"
+          >
+            {isRecording && webCamEnable ? (
+              <p className="text-red-500 flex flex-row font-bold gap-2">
+                <Mic /> Stop
+              </p>
+            ) : isLoading ? (
+              <>
+                <Loader className="animate-spin" /> Saving...
+              </>
+            ) : (
+              "Record Answer"
+            )}
+          </Button>
+          {activeQuestionIndex === mockInterviewQuestions.length - 1 ? (
+            <Link href={"./feedback"}>
+              <Button
+                disabled={!recorded}
+                className="bg-black w-full text-white px-6 py-2 rounded-lg text-sm"
+              >
+                End Interview
+              </Button>
+            </Link>
+          ) : (
             <Button
-              onClick={() => setWebCamEnable(true)}
-              variant="ghost"
-              className="px-4 py-2 rounded-lg text-sm"
-            >
-              {!webCamEnable && (
-                <p className="text-red-500 text-sm">Enable webcam to record.</p>
-              )}
-            </Button>
-          </div>
-        )}
-      </div>
-      <div
-        className= "grid md:grid-cols-2 gap-1 lg:gap-4"
-      >
-        <Button
-          onClick={startStopRecordingAnswer}
-          disabled={isLoading}
-          className="mb-4 w-full bg-black text-white px-6 py-2 rounded-lg text-sm"
-        >
-          {isRecording && webCamEnable ? (
-            <p className="text-red-500 flex flex-row font-bold gap-2">
-              <Mic /> Stop
-            </p>
-          ) : isLoading ? (
-            <>
-              <Loader className="animate-spin" /> Saving...
-            </>
-          ):
-           "Record Answer"
-          }
-        </Button>
-        {activeQuestionIndex === mockInterviewQuestions.length - 1 ? (
-          <Link href={"./feedback"}>
-            <Button
+              onClick={() => {
+                setActiveQuestionIndex(activeQuestionIndex + 1);
+                setRecorded(false); // Reset the recorded state for the next question
+              }}
               disabled={!recorded}
               className="bg-black w-full text-white px-6 py-2 rounded-lg text-sm"
             >
-              End Interview
+              Next
             </Button>
-          </Link>
-        ) : (
-          <Button
-            onClick={() => setActiveQuestionIndex(activeQuestionIndex + 1)}
-            disabled={!recorded}
-            className="bg-black w-full text-white px-6 py-2 rounded-lg text-sm"
-          >
-            Next
-          </Button>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+      
+    </>
   );
 }
 

@@ -7,11 +7,25 @@ import QuestionsSection from "./_components/QuestionsSection";
 import RecordAnswers from "./_components/RecordAnswers";
 import { Lightbulb } from "lucide-react";
 import { motion } from "framer-motion";
+import useSpeechToText from "react-hook-speech-to-text";
 
 function StartInterview({ params }) {
   const [interviewData, setInterviewData] = useState();
   const [mockInterviewQuestion, setMockInterviewQuestion] = useState();
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+
+  const {
+    error,
+    isRecording,
+    results,
+    setResults,
+    startSpeechToText,
+    stopSpeechToText,
+    interimResult
+  } = useSpeechToText({
+    continuous: true,
+    useLegacyResults: false,
+  });
 
   const GetInterviewDetails = async () => {
     try {
@@ -46,10 +60,18 @@ function StartInterview({ params }) {
           activeQuestionIndex={activeQuestionIndex}
           setActiveQuestionIndex={setActiveQuestionIndex}
           interviewData={interviewData}
+          isRecording={isRecording}
+          results={results}
+          setResults={setResults}
+          startSpeechToText={startSpeechToText}
+          stopSpeechToText={stopSpeechToText}
+          error={error}
+      
         />
         <QuestionsSection
           mockInterviewQuestions={mockInterviewQuestion}
           activeQuestionIndex={activeQuestionIndex}
+          interimResult={interimResult}
         />
       </div>
       <div className="bg-blue-100 p-4 rounded-lg shadow-lg">

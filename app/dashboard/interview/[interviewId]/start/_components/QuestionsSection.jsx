@@ -1,16 +1,17 @@
-// components/QuestionsSection.jsx
+"use client";
 import React from "react";
 import { Volume2Icon } from "lucide-react";
+import TypewriterEffect from "./TypeWriter";
 
 function QuestionsSection({
   mockInterviewQuestions,
-  activeQuestionIndex
+  activeQuestionIndex,
+  interimResult,
 }) {
-  
   const textToSpeech = (text) => {
     if ("speechSynthesis" in window) {
       const textToSpeech = new SpeechSynthesisUtterance(text);
-      window.speechSynthesis.speak(textToSpeech)
+      window.speechSynthesis.speak(textToSpeech);
     } else {
       alert("Your browser does not support text to speech");
     }
@@ -49,6 +50,11 @@ function QuestionsSection({
             }}
           />
         </div>
+        {mockInterviewQuestions && interimResult && (
+        <div className="md:my-4">
+          <TypewriterEffect text={interimResult} />
+        </div>
+      )}
       </div>
     </div>
   );
