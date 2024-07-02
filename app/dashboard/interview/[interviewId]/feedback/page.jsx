@@ -4,6 +4,17 @@ import { UserAnswer } from "@/utils/schema";
 import { eq } from "drizzle-orm";
 import React, { useEffect, useState } from "react";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -12,14 +23,30 @@ import { ChevronsUpDown, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 function Feedback({ params }) {
   const [feedbackList, setFeedbackList] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
+  const [showBackDialog, setShowBackDialog] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     GetFeedback();
+  }, []);
+
+  useEffect(() => {
+    const handleBackButton = (e) => {
+      e.preventDefault();
+      setShowBackDialog(true);
+    };
+
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener("popstate", handleBackButton);
+
+    return () => {
+      window.removeEventListener("popstate", handleBackButton);
+    };
   }, []);
 
   const GetFeedback = async () => {
@@ -39,6 +66,35 @@ function Feedback({ params }) {
       setAverageRating(avgRating.toFixed(0));
     }
   };
+
+  const handleBackConfirm = async () => {
+    setShowBackDialog(false);
+    await clearPreviousAnswers(params.interviewId);
+    router.push("/dashboard/interview/" + params.interviewId);
+  };
+
+  const handleBackCancel = () => {
+    setShowBackDialog(false);
+    window.history.pushState(null, null, window.location.pathname);
+  };
+
+  async function clearPreviousAnswers(interviewId) {
+    try {
+      const result = await db
+        .delete(UserAnswer)
+        .where(eq(UserAnswer.mockIdRef, interviewId))
+        .execute();
+
+      if (result) {
+        toast.success("Previous answers cleared successfully!");
+      } else {
+        toast.error("Failed to clear previous answers.");
+      }
+    } catch (error) {
+      console.error("Error clearing previous answers:", error);
+      toast.error("An error occurred. Please try again.");
+    }
+  }
 
   return (
     <motion.div
@@ -122,9 +178,31 @@ function Feedback({ params }) {
             </div>
           </>
         ) : (
+          <div className="flex flex-row">
           <p className="text-sm">Please attempt the interview</p>
+          <p className='bg-transparent text-sm text-blue-900 mx-4 cursor-pointer' onClick={() => {
+              router.replace("/dashboard/interview/"+params.interviewId);
+            }}>Take Interview</p>
+          </div>
         )}
       </div>
+
+      {showBackDialog && (
+        <AlertDialog open={showBackDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure you want to go back?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Going back will clear your previous responses. Do you want to proceed?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={handleBackCancel}>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleBackConfirm}>Confirm</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </motion.div>
   );
 }
