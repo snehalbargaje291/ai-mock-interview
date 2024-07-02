@@ -40,7 +40,7 @@ const Accordion = () => {
         </div>
 
         <div className="-mx-4 flex flex-wrap">
-          <div className="w-full px-4 grid grid-cols-2 gap-4">
+          <div className="w-full px-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
           {questions.map((item, index) => (
               <AccordionItem key={index} header={item.header} text={item.text} />
             ))}
