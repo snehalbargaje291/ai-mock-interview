@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Volume2Icon } from "lucide-react";
-import TypewriterEffect from "./TypeWriter";
+// import TypewriterEffect from "./TypeWriter";
 
 function QuestionsSection({
   mockInterviewQuestions,
@@ -52,7 +52,7 @@ function QuestionsSection({
         </div>
         {/* {mockInterviewQuestions
         <div className="md:my-4">
-          <TypewriterEffect text={interimResult} />
+          {interimResult}
         </div>
       )} */}
       </div>

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Webcam from "react-webcam";
 import { Mic, WebcamIcon, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import useSpeechToText from "react-hook-speech-to-text";
 import toast from "react-hot-toast";
 import { chatSession } from "@/utils/GeminiAIModel";
 import { UserAnswer } from "@/utils/schema";
@@ -10,6 +11,7 @@ import { useUser } from "@clerk/nextjs";
 import moment from "moment";
 import { db } from "@/utils/db";
 import Link from "next/link";
+import QuestionsSection from "./QuestionsSection";
 
 function RecordAnswers({
   interviewData,
@@ -28,7 +30,7 @@ function RecordAnswers({
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useUser();
   const [recorded, setRecorded] = useState(false);
-  const [recordedQuestions, setRecordedQuestions] = useState({});
+  const [isAnswerSaved, setIsAnswerSaved] = useState(false);
 
   useEffect(() => {
     if (results.length > 0) {
@@ -77,10 +79,7 @@ function RecordAnswers({
       if (resp) {
         toast.success("Answer saved successfully!");
         setRecorded(true);
-        setRecordedQuestions({
-          ...recordedQuestions,
-          [activeQuestionIndex]: true,
-        });
+        setIsAnswerSaved(true); // Set the state to indicate the answer is saved
       } else {
         throw new Error("Failed to save answer");
       }
@@ -95,13 +94,6 @@ function RecordAnswers({
   };
 
   const startStopRecordingAnswer = () => {
-    if (recordedQuestions[activeQuestionIndex]) {
-      toast("Answer already recorded for this question", {
-        icon: "⚠️",
-      });
-      return;
-    }
-
     if (!webCamEnable) {
       toast("Please enable camera", {
         icon: "📸",
@@ -153,7 +145,7 @@ function RecordAnswers({
         <div className="grid md:grid-cols-2 gap-1 lg:gap-4">
           <Button
             onClick={startStopRecordingAnswer}
-            disabled={isLoading}
+            disabled={isLoading || isAnswerSaved} // Disable button if answer is saved
             className="mb-4 w-full bg-black text-white px-6 py-2 rounded-lg text-sm"
           >
             {isRecording && webCamEnable ? (
@@ -181,7 +173,8 @@ function RecordAnswers({
             <Button
               onClick={() => {
                 setActiveQuestionIndex(activeQuestionIndex + 1);
-                setRecorded(false); // Reset the recorded state for the next question
+                setRecorded(false);
+                setIsAnswerSaved(false); // Reset the state for the next question
               }}
               disabled={!recorded}
               className="bg-black w-full text-white px-6 py-2 rounded-lg text-sm"
@@ -191,7 +184,6 @@ function RecordAnswers({
           )}
         </div>
       </div>
-      
     </>
   );
 }
