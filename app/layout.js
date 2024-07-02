@@ -9,6 +9,7 @@ import {
 } from "@clerk/nextjs";
 import { GridBackground } from "@/components/ui/background";
 import { Toaster } from "react-hot-toast";
+import ScrollToTop from "@/components/ui/scroll-to-top";
 // import Header from "./dashboard/_components/Header";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
             <Toaster position="top-right" reverseOrder={false} />
             {children}
           </div>
+          <ScrollToTop/>
         </body>
       </html>
     </ClerkProvider>

@@ -33,12 +33,11 @@ const MainNavbar = () => {
           </h1>
         </Link>
         <div className="flex justify-center items-center flex-row gap-8">
-          <Link href={"#FAQ"}
-              className={
-                " text-black cursor-pointer text-sm hover:text-gray-400 hover:font-bold transition-all"
-              }
-            >
-              FAQ
+          <Link
+            href={"#FAQ"}
+            className="text-black cursor-pointer text-sm hover:text-gray-400 hover:font-bold transition-all"
+          >
+            FAQ
           </Link>
           {isSignedIn ? (
             <div className="scale-125">

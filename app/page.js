@@ -1,23 +1,12 @@
 "use client";
-import { FlipWords } from "@/components/ui/flip-word";
 import { HeroParallax } from "@/components/ui/hero-parallax";
-import { UserButton, useUser } from "@clerk/nextjs";
-import Link from "next/link";
 import React from "react";
 import { BentoGridThirdDemo } from "./dashboard/_components/BentoGrid";
 import MainNavbar from "@/components/ui/mainnavbar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { ChevronsUpDown } from "lucide-react";
 import Accordion from "@/components/ui/faq";
 import Footer from "@/components/ui/footer";
 
 function Home() {
-  const { isSignedIn } = useUser();
-  const words = ["better", "cute", "beautiful", "modern"];
   const products = [
     { title: "Product 1", link: "/", thumbnail: "/image.png" },
     { title: "Product 3", link: "/", thumbnail: "/image (1).jpeg" },

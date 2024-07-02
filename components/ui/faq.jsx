@@ -24,7 +24,7 @@ const Accordion = () => {
       <div className="container mx-auto">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
-            <div className="mx-auto mb-[60px] max-w-[520px] text-center lg:mb-20">
+            <div className="mx-auto mb-[60px] max-w-[520px] text-center lg:mb-10">
               <span className="mb-2 block text-xl font-semibold text-primary">
                 FAQ
               </span>
@@ -40,7 +40,7 @@ const Accordion = () => {
         </div>
 
         <div className="-mx-4 flex flex-wrap">
-          <div className="w-full px-4">
+          <div className="w-full px-4 grid grid-cols-2 gap-4">
           {questions.map((item, index) => (
               <AccordionItem key={index} header={item.header} text={item.text} />
             ))}

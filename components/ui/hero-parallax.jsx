@@ -12,9 +12,7 @@ import Link from "next/link";
 import { FlipWords } from "./flip-word";
 import { useUser } from "@clerk/nextjs";
 
-export const HeroParallax = ({
-  products,
-}) => {
+export const HeroParallax = ({ products }) => {
   const firstRow = products.slice(0, 5);
   const secondRow = products.slice(5, 10);
   const thirdRow = products.slice(10, 15);
@@ -99,28 +97,33 @@ export const HeroParallax = ({
 
 export const Header = () => {
   const { isSignedIn } = useUser();
-  const words = ["better", "cute", "beautiful", "modern"];
+  const words = [
+    "Insight",
+    "Mastery",
+    "Precision",
+    "Excellence",
+    "Proficiency",
+  ];
   return (
-    <div className="h-[20rem] mt-20 mx-10 flex justify-center items-center" style={{zIndex:9999}}>
-        <div className="text-4xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
-          Build
-          <FlipWords words={words} /> <br />
-          websites with Aceternity UI
-          <br />
-          <Link href={isSignedIn ? "/dashboard" : "/sign-in"}>
-            <button className="inline-flex text-sm h-8 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-              Let's Start
-            </button>
-          </Link>
-        </div>
+    <div
+      className="h-[20rem] mt-20 mx-10 flex justify-center items-center"
+      style={{ zIndex: 9999 }}
+    >
+      <div className="text-4xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
+        Ignite
+        <FlipWords words={words} /> <br />
+        <p className="text-3xl mt-2">Empower Your Interview.</p>
+        <Link href={isSignedIn ? "/dashboard" : "/sign-in"}>
+          <button className="inline-flex text-sm h-8 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+            Let's Start
+          </button>
+        </Link>
       </div>
+    </div>
   );
 };
 
-export const ProductCard = ({
-  product,
-  translate,
-}) => {
+export const ProductCard = ({ product, translate }) => {
   return (
     <motion.div
       style={{
