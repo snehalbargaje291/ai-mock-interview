@@ -4,6 +4,7 @@ import { HeroParallax } from "@/components/ui/hero-parallax";
 import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
+import { BentoGridThirdDemo } from "./dashboard/_components/BentoGrid";
 
 function Home() {
   const { isSignedIn } = useUser();
@@ -37,7 +38,7 @@ function Home() {
           </Link>
         )}
       </div>
-      <div className="h-[40rem] flex justify-center items-center">
+      {/* <div className="h-[40rem] flex justify-center items-center">
         <div className="text-4xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
           Build
           <FlipWords words={words} /> <br />
@@ -49,9 +50,10 @@ function Home() {
             </button>
           </Link>
         </div>
-      </div>
+      </div> */}
       <div>
-        {/* <HeroParallax products={products}/> */}
+        <HeroParallax products={products}/>
+        <BentoGridThirdDemo />
       </div>
     </>
   );

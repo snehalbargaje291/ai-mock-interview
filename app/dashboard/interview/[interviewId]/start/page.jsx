@@ -13,6 +13,7 @@ function StartInterview({ params }) {
   const [interviewData, setInterviewData] = useState();
   const [mockInterviewQuestion, setMockInterviewQuestion] = useState();
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+  const [interimResults, setInterimResults] = useState("");
 
   const {
     error,
@@ -44,6 +45,8 @@ function StartInterview({ params }) {
     }
   };
 
+  
+
   useEffect(() => {
     GetInterviewDetails();
   }, []);
@@ -71,7 +74,7 @@ function StartInterview({ params }) {
         <QuestionsSection
           mockInterviewQuestions={mockInterviewQuestion}
           activeQuestionIndex={activeQuestionIndex}
-          interimResult={interimResult}
+          interimResult={results}
         />
       </div>
       <div className="bg-blue-100 p-4 rounded-lg shadow-lg">

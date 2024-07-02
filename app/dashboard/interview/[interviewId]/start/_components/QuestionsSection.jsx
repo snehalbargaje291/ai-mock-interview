@@ -50,11 +50,11 @@ function QuestionsSection({
             }}
           />
         </div>
-        {mockInterviewQuestions && interimResult && (
+        {/* {mockInterviewQuestions
         <div className="md:my-4">
           <TypewriterEffect text={interimResult} />
         </div>
-      )}
+      )} */}
       </div>
     </div>
   );
