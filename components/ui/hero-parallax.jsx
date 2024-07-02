@@ -53,7 +53,7 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="h-[90vh] mt-70 py-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+      className="h-[100vh] mt-70 py-40 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
     >
       <Header />
       <motion.div
@@ -101,7 +101,7 @@ export const Header = () => {
   const { isSignedIn } = useUser();
   const words = ["better", "cute", "beautiful", "modern"];
   return (
-    <div className="h-[20rem] flex justify-center items-center z-99">
+    <div className="h-[20rem] mt-20 mx-10 flex justify-center items-center" style={{zIndex:9999}}>
         <div className="text-4xl mx-auto font-normal text-neutral-600 dark:text-neutral-400">
           Build
           <FlipWords words={words} /> <br />
