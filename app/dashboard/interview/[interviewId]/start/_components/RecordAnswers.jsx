@@ -6,12 +6,12 @@ import { Button } from "@/components/ui/button";
 import useSpeechToText from "react-hook-speech-to-text";
 import toast from "react-hot-toast";
 import { chatSession } from "@/utils/GeminiAIModel";
-import { UserAnswer } from "@/utils/schema";
 import { useUser } from "@clerk/nextjs";
 import moment from "moment";
 import { db } from "@/utils/db";
 import Link from "next/link";
 import QuestionsSection from "./QuestionsSection";
+import { UserAnswer } from "@/utils/schema";
 
 function RecordAnswers({
   interviewData,
@@ -42,6 +42,20 @@ function RecordAnswers({
   }, [results]);
 
   useEffect(() => {
+    const handleUnload = () => {
+      sessionStorage.removeItem('userAnswers');
+    };
+    window.addEventListener('beforeunload', handleUnload);
+
+    window.addEventListener('popstate', handleUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload);
+      window.removeEventListener('popstate', handleUnload);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!isRecording && userAnswer.length > 0) {
       saveUserAnswer();
     }
@@ -65,18 +79,7 @@ function RecordAnswers({
         .replace("```", "");
       const jsonFeedbackResp = JSON.parse(mockJsonResp);
 
-      // const resp = await db.insert(UserAnswer).values({
-      //   mockIdRef: interviewData?.mockId,
-      //   question: mockInterviewQuestions[activeQuestionIndex]?.question,
-      //   correctAns: mockInterviewQuestions[activeQuestionIndex]?.answer,
-      //   userAns: userAnswer,
-      //   rating: jsonFeedbackResp.rating,
-      //   feedback: jsonFeedbackResp.feedback,
-      //   userEmail: user?.primaryEmailAddress?.emailAddress,
-      //   createdAt: moment().format("DD-MM-YYYY"),
-      // });
-
-      const resp=localStorage.setItem('userAnswer',JSON.stringify({
+      const userAnswerObject = {
         mockIdRef: interviewData?.mockId,
         question: mockInterviewQuestions[activeQuestionIndex]?.question,
         correctAns: mockInterviewQuestions[activeQuestionIndex]?.answer,
@@ -85,13 +88,16 @@ function RecordAnswers({
         feedback: jsonFeedbackResp.feedback,
         userEmail: user?.primaryEmailAddress?.emailAddress,
         createdAt: moment().format("DD-MM-YYYY"),
-      }))
+      };
 
-      // if (resp) {
-        toast.success("Answer saved successfully!");
-        setRecorded(true);
-        setIsAnswerSaved(true); 
-      // }
+      const storedAnswers =
+        JSON.parse(sessionStorage.getItem("userAnswers")) || [];
+      storedAnswers.push(userAnswerObject);
+      sessionStorage.setItem("userAnswers", JSON.stringify(storedAnswers));
+
+      toast.success("Answer saved successfully!");
+      setRecorded(true);
+      setIsAnswerSaved(true);
     } catch (error) {
       console.error("Error while saving answer:", error);
       toast.error("Error while saving answer, Please try again");
@@ -99,6 +105,44 @@ function RecordAnswers({
       setIsLoading(false);
       setUserAnswer("");
       setResults([]);
+    }
+  };
+
+  const insertAllAnswers = async () => {
+    const storedAnswers = JSON.parse(sessionStorage.getItem("userAnswers")) || [];
+  
+    if (storedAnswers.length === 0) {
+      toast.error("No answers to save");
+      return;
+    }
+  
+    setIsLoading(true);
+  
+    try {
+      // Map each answer object to a db insert operation
+      const promises = storedAnswers.map((answer) =>
+        db.insert(UserAnswer).values({
+          mockIdRef: answer.mockIdRef,
+          question: answer.question,
+          correctAns: answer.correctAns,
+          userAns: answer.userAns,
+          rating: answer.rating,
+          feedback: answer.feedback,
+          userEmail: answer.userEmail,
+          createdAt: answer.createdAt,
+        })
+      );
+  
+      // Execute all insert operations concurrently
+      await Promise.all(promises);
+  
+      toast.success("All answers saved successfully!");
+      sessionStorage.removeItem("userAnswers");
+    } catch (error) {
+      console.error("Error while saving all answers:", error);
+      toast.error("Error while saving all answers, Please try again");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -172,6 +216,7 @@ function RecordAnswers({
           {activeQuestionIndex === mockInterviewQuestions.length - 1 ? (
             <Link href={"./feedback"}>
               <Button
+                onClick={insertAllAnswers}
                 disabled={!recorded}
                 className="bg-black w-full text-white px-6 py-2 rounded-lg text-sm"
               >
@@ -198,3 +243,5 @@ function RecordAnswers({
 }
 
 export default RecordAnswers;
+
+
