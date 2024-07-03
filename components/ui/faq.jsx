@@ -46,7 +46,7 @@ const Accordion = () => {
           : { opacity: 0, y: 100, scale: 0.95 }
       }
       transition={{ duration: 0.8 }}
-      className="relative z-20 max-w-7xl mx-auto overflow-hidden rounded-lg bg-white pb-12 pt-12 dark:bg-dark"
+      className="relative z-20 max-w-7xl mx-auto overflow-hidden rounded-lg pb-12 pt-24 dark:bg-dark"
     >
       <div className="container mx-auto">
         <div className="-mx-4 flex flex-wrap">

@@ -1,4 +1,6 @@
 "use client";
+import { motion, useInView } from "framer-motion";
+import React, { useRef } from "react";
 import { cn } from "@/utils/cn";
 // import React from "react";
 // import {
@@ -8,15 +10,24 @@ import { cn } from "@/utils/cn";
 //   IconSignature,
 //   IconTableColumn,
 // } from "@tabler/icons-react";
-import { motion } from "framer-motion";
 // import Image from "next/image";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { Check, Wallet2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function BentoGridThirdDemo() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: false });
   return (
-    <BentoGrid className="w-[100%] mx-auto md:auto-rows-[20rem]">
+    <motion.div ref={ref}
+    initial={{ opacity: 0, y: 50, scale: 0.95 }}
+    animate={
+      inView
+        ? { opacity: 1, y: 0, scale: 1 }
+        : { opacity: 0, y: 100, scale: 0.95 }
+    }
+    transition={{ duration: 0.8 }}>
+      <BentoGrid className="w-[100%] mx-auto pt-24 md:auto-rows-[20rem]">
       {items.map((item, i) => (
         <BentoGridItem
           key={i}
@@ -28,6 +39,7 @@ export function BentoGridThirdDemo() {
         />
       ))}
     </BentoGrid>
+    </motion.div>
   );
 }
 const Skeleton = () => (
