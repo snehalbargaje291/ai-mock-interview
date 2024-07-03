@@ -50,7 +50,7 @@ function QuestionsSection({
             }}
           />
         </div>
-        <div className="text-xs md:my-2">
+        <div className="text-xs md:my-2 text-blue-900">
           {interimResult}
         </div>
       </div>
