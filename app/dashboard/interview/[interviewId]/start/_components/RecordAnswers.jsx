@@ -65,7 +65,18 @@ function RecordAnswers({
         .replace("```", "");
       const jsonFeedbackResp = JSON.parse(mockJsonResp);
 
-      const resp = await db.insert(UserAnswer).values({
+      // const resp = await db.insert(UserAnswer).values({
+      //   mockIdRef: interviewData?.mockId,
+      //   question: mockInterviewQuestions[activeQuestionIndex]?.question,
+      //   correctAns: mockInterviewQuestions[activeQuestionIndex]?.answer,
+      //   userAns: userAnswer,
+      //   rating: jsonFeedbackResp.rating,
+      //   feedback: jsonFeedbackResp.feedback,
+      //   userEmail: user?.primaryEmailAddress?.emailAddress,
+      //   createdAt: moment().format("DD-MM-YYYY"),
+      // });
+
+      const resp=localStorage.setItem('userAnswer',JSON.stringify({
         mockIdRef: interviewData?.mockId,
         question: mockInterviewQuestions[activeQuestionIndex]?.question,
         correctAns: mockInterviewQuestions[activeQuestionIndex]?.answer,
@@ -74,15 +85,13 @@ function RecordAnswers({
         feedback: jsonFeedbackResp.feedback,
         userEmail: user?.primaryEmailAddress?.emailAddress,
         createdAt: moment().format("DD-MM-YYYY"),
-      });
+      }))
 
-      if (resp) {
+      // if (resp) {
         toast.success("Answer saved successfully!");
         setRecorded(true);
-        setIsAnswerSaved(true); // Set the state to indicate the answer is saved
-      } else {
-        throw new Error("Failed to save answer");
-      }
+        setIsAnswerSaved(true); 
+      // }
     } catch (error) {
       console.error("Error while saving answer:", error);
       toast.error("Error while saving answer, Please try again");

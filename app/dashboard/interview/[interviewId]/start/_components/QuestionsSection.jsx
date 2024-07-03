@@ -50,11 +50,9 @@ function QuestionsSection({
             }}
           />
         </div>
-        {/* {mockInterviewQuestions
         <div className="md:my-4">
           {interimResult}
         </div>
-      )} */}
       </div>
     </div>
   );

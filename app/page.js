@@ -26,11 +26,13 @@ function Home() {
       <div>
         <HeroParallax products={products} />
       </div>
-      <div className="m-5">
-        <BentoGridThirdDemo />
-      </div>
-      <div id="FAQ" className="m-5 lg:m-7">
-        <Accordion/>
+      <div className="my-10">
+        <div id="pricing" className="mb-16 md:mb-28 lg:mb-32">
+          <BentoGridThirdDemo />
+        </div>
+        <div id="FAQ" className="mx-10">
+          <Accordion />
+        </div>
       </div>
       <Footer/>
     </>

@@ -1,26 +1,53 @@
-'use client';
-import React, { useState } from "react";
+"use client";
+import React, { useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
 
 const Accordion = () => {
-    const questions = [
-        {
-          header: "How long does it take to deliver the first blog post?",
-          text:
-            "It takes 2-3 weeks to get your first blog post ready. That includes the in-depth research and creation of your monthly content marketing strategy that we do before writing your first blog post.",
-        },
-        {
-          header: "What are the main services you offer?",
-          text:
-            "We offer content marketing services including blog post writing, SEO optimization, social media management, and more. Our goal is to help businesses increase their online presence through quality content.",
-        },
-        {
-          header: "How can I track the progress of my project?",
-          text:
-            "We provide regular updates and reports on the progress of your project. You can also communicate directly with our team to discuss any specific requirements or updates.",
-        },
-      ];
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: false });
+  const questions = [
+    {
+      header: "How long does it take to create an interview?",
+      text: "It takes a few minutes to generate an interview. You simply need to fill in details such as job position or title, job description or skills, and years of experience. Our AI will then generate the questions and answers for your interview.",
+    },
+    {
+      header: "What features does the AI mock interview application offer?",
+      text: "Our application offers a comprehensive interview simulation experience. You can create interviews, record your answers, receive AI-generated feedback comparing your responses to expected answers, and get a rating out of 10. Completed interviews are stored in your dashboard for retakes, review, or deletion.",
+    },
+    {
+      header: "How do I record my answers and receive feedback?",
+      text: "After generating the interview, you can start recording your answers using the provided interface. Once you've completed the interview, the AI will analyze your responses, compare them with expected answers, and provide feedback along with a rating out of 10.",
+    },
+    {
+      header: "Can I retake or review my completed interviews?",
+      text: "Yes, all your completed interviews are stored in your dashboard. You can retake any interview, review the feedback provided, or delete them as needed.",
+    },
+    {
+      header: "How is the feedback generated?",
+      text: "The feedback is generated using advanced AI algorithms that compare your recorded answers with the expected answers. It evaluates your responses based on relevance, clarity, and completeness, and then provides a rating out of 10 along with detailed feedback.",
+    },
+    {
+      header: "What types of job positions can I create interviews for?",
+      text: "You can create interviews for a wide range of job positions across various industries. Our AI is equipped to handle different roles and tailor questions based on the job description and required skills you provide.",
+    },
+    // {
+    //   header: "Is my data secure on the platform?",
+    //   text: "Yes, we prioritize your data security. All your personal information, interview details, and recorded answers are stored securely and are only accessible to you. We comply with industry standards and regulations to ensure your data is protected.",
+    // },
+  ];
+
   return (
-    <section className="relative z-20 overflow-hidden rounded-lg bg-white pb-12 pt-12 dark:bg-dark">
+    <motion.section
+      ref={ref}
+      initial={{ opacity: 0, y: 50, scale: 0.95 }}
+      animate={
+        inView
+          ? { opacity: 1, y: 0, scale: 1 }
+          : { opacity: 0, y: 100, scale: 0.95 }
+      }
+      transition={{ duration: 0.8 }}
+      className="relative z-20 max-w-7xl mx-auto overflow-hidden rounded-lg bg-white pb-12 pt-12 dark:bg-dark"
+    >
       <div className="container mx-auto">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
@@ -38,16 +65,18 @@ const Accordion = () => {
             </div>
           </div>
         </div>
-
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {questions.map((item, index) => (
-              <AccordionItem key={index} header={item.header} text={item.text} />
+            {questions.map((item, index) => (
+              <AccordionItem
+                key={index}
+                header={item.header}
+                text={item.text}
+              />
             ))}
           </div>
         </div>
       </div>
-
       <div className="absolute bottom-0 right-0 z-[-1]">
         <svg
           width="1440"
@@ -77,7 +106,7 @@ const Accordion = () => {
           </defs>
         </svg>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
@@ -85,16 +114,29 @@ export default Accordion;
 
 const AccordionItem = ({ header, text }) => {
   const [active, setActive] = useState(false);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: false });
 
-  const handleToggle = () => {
-    event.preventDefault();
+  const handleToggle = (e) => {
+    e.preventDefault();
     setActive(!active);
   };
+
   return (
-    <div className="mb-6 w-full rounded-lg bg-white p-4 shadow-[0px_20px_95px_0px_rgba(201,203,204,0.30)]">
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50, scale: 0.95 }}
+      animate={
+        inView
+          ? { opacity: 1, y: 0, scale: 1 }
+          : { opacity: 0, y: 50, scale: 0.95 }
+      }
+      transition={{ duration: 0.6 }}
+      className="mb-6 w-full rounded-lg bg-white p-4 shadow-[0px_20px_95px_0px_rgba(201,203,204,0.30)]"
+    >
       <button
         className={`faq-btn flex w-full text-left`}
-        onClick={() => handleToggle()}
+        onClick={handleToggle}
       >
         <div className="mr-5 flex h-6 w-full max-w-[40px] items-center justify-center rounded-lg text-primary dark:bg-white/5">
           <svg
@@ -113,14 +155,12 @@ const AccordionItem = ({ header, text }) => {
             />
           </svg>
         </div>
-
         <div className="w-full">
           <h4 className="mt-1 text-sm font-semibold text-dark dark:text-white">
             {header}
           </h4>
         </div>
       </button>
-
       <div
         className={`pl-[62px] duration-200 ease-in-out ${
           active ? "block" : "hidden"
@@ -130,6 +170,6 @@ const AccordionItem = ({ header, text }) => {
           {text}
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 };
