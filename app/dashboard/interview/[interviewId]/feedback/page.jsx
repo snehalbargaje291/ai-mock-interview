@@ -3,17 +3,17 @@ import { db } from "@/utils/db";
 import { UserAnswer } from "@/utils/schema";
 import { eq } from "drizzle-orm";
 import React, { useEffect, useState } from "react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+// import {
+//   AlertDialog,
+//   AlertDialogAction,
+//   AlertDialogCancel,
+//   AlertDialogContent,
+//   AlertDialogDescription,
+//   AlertDialogFooter,
+//   AlertDialogHeader,
+//   AlertDialogTitle,
+//   AlertDialogTrigger,
+// } from "@/components/ui/alert-dialog";
 import {
   Collapsible,
   CollapsibleContent,
@@ -28,7 +28,7 @@ import toast from "react-hot-toast";
 function Feedback({ params }) {
   const [feedbackList, setFeedbackList] = useState([]);
   const [averageRating, setAverageRating] = useState(0);
-  const [showBackDialog, setShowBackDialog] = useState(false);
+  // const [showBackDialog, setShowBackDialog] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ function Feedback({ params }) {
   useEffect(() => {
     const handleBackButton = (e) => {
       e.preventDefault();
-      setShowBackDialog(true);
+      router.push("/dashboard");
     };
 
     window.history.pushState(null, null, window.location.pathname);
@@ -67,16 +67,16 @@ function Feedback({ params }) {
     }
   };
 
-  const handleBackConfirm = async () => {
-    setShowBackDialog(false);
-    await clearPreviousAnswers(params.interviewId);
-    router.push("/dashboard/interview/" + params.interviewId);
-  };
+  // const handleBackConfirm = async () => {
+  //   setShowBackDialog(false);
+  //   await clearPreviousAnswers(params.interviewId);
+  //   router.push("/dashboard/interview/" + params.interviewId);
+  // };
 
-  const handleBackCancel = () => {
-    setShowBackDialog(false);
-    window.history.pushState(null, null, window.location.pathname);
-  };
+  // const handleBackCancel = () => {
+  //   setShowBackDialog(false);
+  //   window.history.pushState(null, null, window.location.pathname);
+  // };
 
   async function clearPreviousAnswers(interviewId) {
     try {
@@ -187,7 +187,7 @@ function Feedback({ params }) {
         )}
       </div>
 
-      {showBackDialog && (
+      {/* {showBackDialog && (
         <AlertDialog open={showBackDialog}>
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -202,7 +202,7 @@ function Feedback({ params }) {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-      )}
+      )} */}
     </motion.div>
   );
 }

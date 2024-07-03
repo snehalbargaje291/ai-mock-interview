@@ -8,11 +8,23 @@ import RecordAnswers from "./_components/RecordAnswers";
 import { Lightbulb } from "lucide-react";
 import { motion } from "framer-motion";
 import useSpeechToText from "react-hook-speech-to-text";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 function StartInterview({ params }) {
   const [interviewData, setInterviewData] = useState();
   const [mockInterviewQuestion, setMockInterviewQuestion] = useState();
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+  const [showBackDialog, setShowBackDialog] = useState(false);
   // const [interimResults, setInterimResults] = useState("");
 
   const {
@@ -45,7 +57,29 @@ function StartInterview({ params }) {
     }
   };
 
+  const handleBackConfirm = async () => {
+      setShowBackDialog(false);
+      router.push("/dashboard/interview/" + params.interviewId);
+    };
   
+    const handleBackCancel = () => {
+      setShowBackDialog(false);
+      window.history.pushState(null, null, window.location.pathname);
+    };
+
+    useEffect(() => {
+      const handleBackButton = (e) => {
+        e.preventDefault();
+        setShowBackDialog(true);
+      };
+  
+      window.history.pushState(null, null, window.location.pathname);
+      window.addEventListener("popstate", handleBackButton);
+  
+      return () => {
+        window.removeEventListener("popstate", handleBackButton);
+      };
+    }, []);
 
   useEffect(() => {
     GetInterviewDetails();
@@ -87,6 +121,22 @@ function StartInterview({ params }) {
           at the last we will give feedback on how well you answer the question.
         </p>
       </div>
+    {showBackDialog && (
+        <AlertDialog open={showBackDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure you want to go back?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Going back will clear your previous responses. Do you want to proceed?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={handleBackCancel}>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleBackConfirm}>Confirm</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </motion.div>
   );
 }
