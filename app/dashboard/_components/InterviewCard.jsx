@@ -30,7 +30,7 @@ function capitalizeFirstLetter(str) {
   return str.replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-async function deleteInterview(interviewId) {
+async function deleteInterview(interviewId, onDelete) {
   try {
     const result = await db
       .delete(MockInterview)
@@ -39,6 +39,7 @@ async function deleteInterview(interviewId) {
 
     if (result) {
       toast.success("Interview deleted successfully!");
+      onDelete(interviewId); // Update state in InterviewList
     } else {
       toast.error("Failed to delete the interview.");
     }
@@ -54,7 +55,7 @@ async function clearPreviousAnswers(interviewId) {
       .select()
       .from(UserAnswer)
       .where(eq(UserAnswer.mockIdRef, interviewId));
-    
+
     if (previousAnswers.length > 0) {
       const result = await db
         .delete(UserAnswer)
@@ -92,6 +93,7 @@ function InterviewCard({
   yearsOfExp,
   createdAt,
   interviewId,
+  onDelete, // Callback function from InterviewList
 }) {
   const [showModal, setShowModal] = useState(false);
   const [showAlertDialog, setShowAlertDialog] = useState(false);
@@ -115,6 +117,10 @@ function InterviewCard({
     setShowAlertDialog(false);
     await clearPreviousAnswers(interviewId);
     router.push("/dashboard/interview/" + interviewId);
+  };
+
+  const handleDelete = () => {
+    deleteInterview(interviewId, onDelete);
   };
 
   return (
@@ -141,7 +147,7 @@ function InterviewCard({
           </div>
           <button
             className="text-red-500 hover:text-red-700"
-            onClick={() => deleteInterview(interviewId)}
+            onClick={handleDelete}
           >
             <Trash2 size={20} />
           </button>
@@ -151,7 +157,9 @@ function InterviewCard({
             <Button
               variant="outline"
               onClick={() => {
-                router.push("/dashboard/interview/" + interviewId + "/feedback");
+                router.push(
+                  "/dashboard/interview/" + interviewId + "/feedback"
+                );
               }}
             >
               Feedback
@@ -162,14 +170,21 @@ function InterviewCard({
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogTitle>
+                    Are you absolutely sure?
+                  </AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action will clear all previous responses and start a new interview. This cannot be undone.
+                    This action will clear all previous responses and start a
+                    new interview. This cannot be undone.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel onClick={handleCloseModal}>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleConfirmModal}>Confirm</AlertDialogAction>
+                  <AlertDialogCancel onClick={handleCloseModal}>
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction onClick={handleConfirmModal}>
+                    Confirm
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

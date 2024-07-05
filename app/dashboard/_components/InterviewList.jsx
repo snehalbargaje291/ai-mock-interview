@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { db } from '@/utils/db';
-import { MockInterview } from '@/utils/schema';
-import { useUser } from '@clerk/nextjs';
-import { desc, eq } from 'drizzle-orm';
-import InterviewCard from './InterviewCard';
+import React, { useEffect, useState } from "react";
+import { db } from "@/utils/db";
+import { MockInterview } from "@/utils/schema";
+import { useUser } from "@clerk/nextjs";
+import { desc, eq } from "drizzle-orm";
+import InterviewCard from "./InterviewCard";
 
 function capitalizeFirstLetter(str) {
-  if (typeof str !== 'string' || !str.trim()) {
-    return ''; // Handle non-string or empty string cases
+  if (typeof str !== "string" || !str.trim()) {
+    return ""; // Handle non-string or empty string cases
   }
   return str.replace(/\b\w/g, (char) => char.toUpperCase());
 }
@@ -29,10 +29,10 @@ function InterviewList() {
         .from(MockInterview)
         .where(eq(MockInterview.createdBy, user?.primaryEmailAddress?.emailAddress))
         .orderBy(desc(MockInterview.id));
-      
+
       setInterviews(result);
     } catch (error) {
-      console.error('Error fetching interviews:', error);
+      console.error("Error fetching interviews:", error);
     }
   };
 
@@ -48,7 +48,7 @@ function InterviewList() {
       <h4 className="text-gray-500 text-sm">
         Access Previous Mock Interviews Here.
       </h4>
-      <div className='grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 my-6'>
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 my-6">
         {interviews.length > 0 ? (
           interviews.map((interview, index) => (
             <InterviewCard
