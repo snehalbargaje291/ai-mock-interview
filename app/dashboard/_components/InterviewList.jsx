@@ -36,6 +36,12 @@ function InterviewList() {
     }
   };
 
+  const removeInterviewFromList = (interviewId) => {
+    setInterviews((prevInterviews) =>
+      prevInterviews.filter((interview) => interview.mockId !== interviewId)
+    );
+  };
+
   return (
     <div>
       <h1 className="font-bold text-lg">Interview List</h1>
@@ -52,6 +58,7 @@ function InterviewList() {
               yearsOfExp={interview.jobExperience}
               createdAt={interview.createdAt}
               interviewId={interview.mockId}
+              onDelete={removeInterviewFromList} // Pass remove function
             />
           ))
         ) : (

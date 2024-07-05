@@ -77,13 +77,6 @@ function Header() {
               >
                 Dashboard
               </li></Link>
-              <Link href={'/questions'}><li
-                className={`${
-                  path == "/questions" && "text-gray-600 font-bold"
-                } text-black cursor-pointer text-sm hover:text-gray-400 hover:font-bold transition-all`}
-              >
-                Questions
-              </li></Link>
               <Link href={'/howitworks'}><li
                 className={`${
                   path == "/howitworks" && "text-gray-600 font-bold"

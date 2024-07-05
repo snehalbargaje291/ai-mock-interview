@@ -2,13 +2,21 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { UserButton, useUser } from "@clerk/nextjs";
+// import { useRouter } from "next/navigation";
 
 const MainNavbar = () => {
+  // const router = useRouter();
   const { isSignedIn } = useUser();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [scrollTimeout, setScrollTimeout] = useState(null);
 
+  // useEffect(() => {
+  //   if (isSignedIn) {
+  //     router.push("/dashboard");
+  //   }
+  // }, [isSignedIn, router]);
+  
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;

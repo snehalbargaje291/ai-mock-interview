@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 import {
   Dialog,
   DialogClose,
@@ -33,6 +33,7 @@ function AddNewInterview() {
     experience: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
   const [jsonResp, setJsonResp] = useState([]);
   const router = useRouter();
   const { user } = useUser();
@@ -73,15 +74,15 @@ function AddNewInterview() {
           .returning({ mockId: MockInterview.mockId });
 
         if (resp) {
-          toast.success(
-            "Interview created successfully!"
-          );
+          toast.success("Interview created successfully!");
           setIsDialogOpen(false);
+          setIsLoading(false);
+          setIsNavigating(true);
           router.push("/dashboard/interview/" + resp[0]?.mockId);
         }
       }
     } catch (error) {
-      setIsDialogOpen(false)
+      setIsDialogOpen(false);
       console.error("Error parsing JSON:", error);
       toast.error(
         "Failed to generate valid interview questions. Please try again."
@@ -91,9 +92,8 @@ function AddNewInterview() {
         jobDescription: "",
         experience: "",
       });
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return (
@@ -101,8 +101,8 @@ function AddNewInterview() {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <motion.div
-          whileHover={{ scale: 0.9 }}
-          whileTap={{ scale: 1.1}}
+            whileHover={{ scale: 0.9 }}
+            whileTap={{ scale: 1.1 }}
             className="p-5 border rounded-lg bg-secondary shadow-lg cursor-pointer transition-all flex justify-center items-center"
             onClick={() => setIsDialogOpen(true)}
           >
@@ -175,7 +175,7 @@ function AddNewInterview() {
             </div>
             <DialogFooter className="mt-4 flex flex-row justify-end gap-2">
               <Button
-                disabled={isLoading}
+                disabled={isLoading || isNavigating}
                 type="submit"
                 className="bg-blue-600 text-white hover:bg-blue-700"
               >
@@ -200,6 +200,12 @@ function AddNewInterview() {
           </form>
         </DialogContent>
       </Dialog>
+
+      {isNavigating && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50" style={{zIndex:9999}}>
+          <LoaderCircle className="w-12 h-12 animate-spin text-white" />
+        </div>
+      )}
     </>
   );
 }
