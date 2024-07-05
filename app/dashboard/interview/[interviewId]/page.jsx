@@ -7,11 +7,11 @@ import { motion } from "framer-motion";
 import { Lightbulb, WebcamIcon } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import Webcam from "react-webcam";
+// import Webcam from "react-webcam";
 
 function Interview({ params }) {
   const [interviewData, setInterviewData] = useState(null);
-  const [webCamEnable, setWebCamEnable] = useState(false);
+  // const [webCamEnable, setWebCamEnable] = useState(false);
 
   const interviewInfo = JSON.parse(process.env.NEXT_PUBLIC_INFORMATION);
 

@@ -19,6 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useRouter } from "next/navigation";
 
 function StartInterview({ params }) {
   const [interviewData, setInterviewData] = useState();
@@ -34,12 +35,13 @@ function StartInterview({ params }) {
     setResults,
     startSpeechToText,
     stopSpeechToText,
-    interimResult
+    interimResult,
   } = useSpeechToText({
     continuous: true,
     useLegacyResults: false,
   });
 
+  const router = useRouter()
   const GetInterviewDetails = async () => {
     try {
       const result = await db
@@ -58,28 +60,29 @@ function StartInterview({ params }) {
   };
 
   const handleBackConfirm = async () => {
-      setShowBackDialog(false);
-      router.push("/dashboard/interview/" + params.interviewId);
-    };
-  
-    const handleBackCancel = () => {
-      setShowBackDialog(false);
-      window.history.pushState(null, null, window.location.pathname);
+    setShowBackDialog(false);
+    router.push("/dashboard/interview/" + params.interviewId);
+    
+  };
+
+  const handleBackCancel = () => {
+    setShowBackDialog(false);
+    window.history.pushState(null, null, window.location.pathname);
+  };
+
+  useEffect(() => {
+    const handleBackButton = (e) => {
+      e.preventDefault();
+      setShowBackDialog(true);
     };
 
-    useEffect(() => {
-      const handleBackButton = (e) => {
-        e.preventDefault();
-        setShowBackDialog(true);
-      };
-  
-      window.history.pushState(null, null, window.location.pathname);
-      window.addEventListener("popstate", handleBackButton);
-  
-      return () => {
-        window.removeEventListener("popstate", handleBackButton);
-      };
-    }, []);
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener("popstate", handleBackButton);
+
+    return () => {
+      window.removeEventListener("popstate", handleBackButton);
+    };
+  }, []);
 
   useEffect(() => {
     GetInterviewDetails();
@@ -103,7 +106,6 @@ function StartInterview({ params }) {
           startSpeechToText={startSpeechToText}
           stopSpeechToText={stopSpeechToText}
           error={error}
-      
         />
         <QuestionsSection
           mockInterviewQuestions={mockInterviewQuestion}
@@ -121,18 +123,25 @@ function StartInterview({ params }) {
           at the last we will give feedback on how well you answer the question.
         </p>
       </div>
-    {showBackDialog && (
+      {showBackDialog && (
         <AlertDialog open={showBackDialog}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you sure you want to go back?</AlertDialogTitle>
+              <AlertDialogTitle>
+                Are you sure you want to go back?
+              </AlertDialogTitle>
               <AlertDialogDescription>
-                Going back will clear your previous responses. Do you want to proceed?
+                Going back will clear your previous responses. Do you want to
+                proceed?
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={handleBackCancel}>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={handleBackConfirm}>Confirm</AlertDialogAction>
+              <AlertDialogCancel onClick={handleBackCancel}>
+                Cancel
+              </AlertDialogCancel>
+              <AlertDialogAction onClick={handleBackConfirm}>
+                Confirm
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
