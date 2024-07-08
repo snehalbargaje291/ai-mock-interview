@@ -2,21 +2,13 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { UserButton, useUser } from "@clerk/nextjs";
-// import { useRouter } from "next/navigation";
 
 const MainNavbar = () => {
-  // const router = useRouter();
   const { isSignedIn } = useUser();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [scrollTimeout, setScrollTimeout] = useState(null);
 
-  // useEffect(() => {
-  //   if (isSignedIn) {
-  //     router.push("/dashboard");
-  //   }
-  // }, [isSignedIn, router]);
-  
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -53,19 +45,19 @@ const MainNavbar = () => {
     >
       <Link href={"/"}>
         <h1 className="text-xl font-bold text-black cursor-pointer">
-          Mockstar.ai
+          Mock.ai
         </h1>
       </Link>
       <div className="flex justify-center items-center flex-row gap-8">
-      <Link
+        <Link
           href={"#pricing"}
-          className="text-black cursor-pointer text-sm hover:text-gray-400 hover:font-bold transition-all"
+          className="text-gray-600 font-semibold cursor-pointer text-sm hover:text-gray-400 hover:font-bold transition-all"
         >
           Pricing
         </Link>
         <Link
           href={"#FAQ"}
-          className="text-black cursor-pointer text-sm hover:text-gray-400 hover:font-bold transition-all"
+          className="text-gray-600 font-semibold cursor-pointer text-sm hover:text-gray-400 hover:font-bold transition-all"
         >
           FAQ
         </Link>

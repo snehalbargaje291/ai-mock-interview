@@ -34,24 +34,21 @@ function RecordAnswers({
 
   useEffect(() => {
     if (results.length > 0) {
-      const combinedTranscript = results
-        .map((result) => result.transcript)
-        .join(" ");
+      const combinedTranscript = results.map(result => result.transcript).join(" ");
       setUserAnswer(combinedTranscript);
     }
   }, [results]);
 
   useEffect(() => {
     const handleUnload = () => {
-      sessionStorage.removeItem('userAnswers');
+      sessionStorage.removeItem("userAnswers");
     };
-    window.addEventListener('beforeunload', handleUnload);
-
-    window.addEventListener('popstate', handleUnload);
+    window.addEventListener("beforeunload", handleUnload);
+    window.addEventListener("popstate", handleUnload);
 
     return () => {
-      window.removeEventListener('beforeunload', handleUnload);
-      window.removeEventListener('popstate', handleUnload);
+      window.removeEventListener("beforeunload", handleUnload);
+      window.removeEventListener("popstate", handleUnload);
     };
   }, []);
 
@@ -64,7 +61,7 @@ function RecordAnswers({
   const saveUserAnswer = async () => {
     setIsLoading(true);
 
-    if (userAnswer?.length < 10) {
+    if (userAnswer.length < 10) {
       setIsLoading(false);
       toast.error("Error while saving answer, Please record again");
       return;
@@ -73,10 +70,7 @@ function RecordAnswers({
     try {
       const feedbackPrompt = `Question: ${mockInterviewQuestions[activeQuestionIndex]?.question}, User Answer: ${userAnswer}, Depending on the Question and User Answer, please give rating out of 10 and feedback to user as area of improvement (if any) in just 3-5 lines to improve it in JSON format with rating field and feedback field. Also see if the user is repeating the question itself as answer and give appropriate rating and feedback in json`;
       const result = await chatSession.sendMessage(feedbackPrompt);
-      const mockJsonResp = result.response
-        .text()
-        .replace("```json", "")
-        .replace("```", "");
+      const mockJsonResp = result.response.text().replace("```json", "").replace("```", "");
       const jsonFeedbackResp = JSON.parse(mockJsonResp);
 
       const userAnswerObject = {
@@ -90,8 +84,7 @@ function RecordAnswers({
         createdAt: moment().format("DD-MM-YYYY"),
       };
 
-      const storedAnswers =
-        JSON.parse(sessionStorage.getItem("userAnswers")) || [];
+      const storedAnswers = JSON.parse(sessionStorage.getItem("userAnswers")) || [];
       storedAnswers.push(userAnswerObject);
       sessionStorage.setItem("userAnswers", JSON.stringify(storedAnswers));
 
@@ -110,17 +103,16 @@ function RecordAnswers({
 
   const insertAllAnswers = async () => {
     const storedAnswers = JSON.parse(sessionStorage.getItem("userAnswers")) || [];
-  
+
     if (storedAnswers.length === 0) {
       toast.error("No answers to save");
       return;
     }
-  
+
     setIsLoading(true);
-  
+
     try {
-      // Map each answer object to a db insert operation
-      const promises = storedAnswers.map((answer) =>
+      const promises = storedAnswers.map(answer =>
         db.insert(UserAnswer).values({
           mockIdRef: answer.mockIdRef,
           question: answer.question,
@@ -132,10 +124,9 @@ function RecordAnswers({
           createdAt: answer.createdAt,
         })
       );
-  
-      // Execute all insert operations concurrently
+
       await Promise.all(promises);
-  
+
       toast.success("All answers saved successfully!");
       sessionStorage.removeItem("userAnswers");
     } catch (error) {
@@ -148,17 +139,11 @@ function RecordAnswers({
 
   const startStopRecordingAnswer = () => {
     if (!webCamEnable) {
-      toast("Please enable camera", {
-        icon: "📸",
-      });
+      toast("Please enable camera", { icon: "📸" });
       return;
     }
 
-    if (isRecording) {
-      stopSpeechToText();
-    } else {
-      startSpeechToText();
-    }
+    isRecording ? stopSpeechToText() : startSpeechToText();
   };
 
   if (error) return <p>Web Speech API is not available in this browser 🤷‍</p>;
@@ -166,82 +151,76 @@ function RecordAnswers({
   if (!mockInterviewQuestions) return null;
 
   return (
-    <>
-      <div className="flex flex-col lg:w-[50%] bg-white p-4 md:rounded-lg md:border md:shadow-md mb-4 md:mb-0 md:mr-4">
-        <div className="flex justify-center items-center mb-4">
-          {webCamEnable ? (
-            <Webcam
-              onUserMedia={() => setWebCamEnable(true)}
-              onUserMediaError={() => setWebCamEnable(false)}
-              mirrored={true}
-              style={{ height: 250, width: "100%" }}
-            />
-          ) : (
-            <div className="flex flex-col justify-center items-center gap-4">
-              <div className="w-40 h-40 flex justify-center items-center">
-                <WebcamIcon className="w-20 h-20 text-gray-400" />
-              </div>
-              <Button
-                onClick={() => setWebCamEnable(true)}
-                variant="ghost"
-                className="px-4 py-2 rounded-lg text-sm"
-              >
-                {!webCamEnable && (
-                  <p className="text-red-500 text-sm">
-                    Enable webcam to record.
-                  </p>
-                )}
-              </Button>
+    <div className="flex flex-col lg:w-[50%] bg-white p-4 md:rounded-lg md:border md:shadow-md mb-4 md:mb-0 md:mr-4">
+      <div className="flex justify-center items-center mb-4">
+        {webCamEnable ? (
+          <Webcam
+            onUserMedia={() => setWebCamEnable(true)}
+            onUserMediaError={() => setWebCamEnable(false)}
+            mirrored
+            style={{ height: 250, width: "100%" }}
+          />
+        ) : (
+          <div className="flex flex-col justify-center items-center gap-4">
+            <div className="w-40 h-40 flex justify-center items-center">
+              <WebcamIcon className="w-20 h-20 text-gray-400" />
             </div>
-          )}
-        </div>
-        <div className="grid md:grid-cols-2 gap-1 lg:gap-4">
-          <Button
-            onClick={startStopRecordingAnswer}
-            disabled={isLoading || isAnswerSaved} // Disable button if answer is saved
-            className="mb-4 w-full bg-black text-white px-6 py-2 rounded-lg text-sm"
-          >
-            {isRecording && webCamEnable ? (
-              <p className="text-red-500 flex flex-row font-bold gap-2">
-                <Mic /> Stop
-              </p>
-            ) : isLoading ? (
-              <>
-                <Loader className="animate-spin" /> Saving...
-              </>
-            ) : (
-              "Record Answer"
-            )}
-          </Button>
-          {activeQuestionIndex === mockInterviewQuestions.length - 1 ? (
-            <Link href={"./feedback"}>
-              <Button
-                onClick={insertAllAnswers}
-                disabled={!recorded}
-                className="bg-black w-full text-white px-6 py-2 rounded-lg text-sm"
-              >
-                End Interview
-              </Button>
-            </Link>
-          ) : (
             <Button
-              onClick={() => {
-                setActiveQuestionIndex(activeQuestionIndex + 1);
-                setRecorded(false);
-                setIsAnswerSaved(false); // Reset the state for the next question
-              }}
+              onClick={() => setWebCamEnable(true)}
+              variant="ghost"
+              className="px-4 py-2 rounded-lg text-sm"
+            >
+              {!webCamEnable && (
+                <p className="text-red-500 text-sm">Enable webcam to record.</p>
+              )}
+            </Button>
+          </div>
+        )}
+      </div>
+      <div className="grid md:grid-cols-2 gap-1 lg:gap-4">
+        <Button
+          onClick={startStopRecordingAnswer}
+          disabled={isLoading || isAnswerSaved}
+          className="mb-4 w-full bg-black text-white px-6 py-2 rounded-lg text-sm"
+        >
+          {isRecording && webCamEnable ? (
+            <p className="text-red-500 flex flex-row font-bold gap-2">
+              <Mic /> Stop
+            </p>
+          ) : isLoading ? (
+            <>
+              <Loader className="animate-spin" /> Saving...
+            </>
+          ) : (
+            "Record Answer"
+          )}
+        </Button>
+        {activeQuestionIndex === mockInterviewQuestions.length - 1 ? (
+          <Link href="./feedback">
+            <Button
+              onClick={insertAllAnswers}
               disabled={!recorded}
               className="bg-black w-full text-white px-6 py-2 rounded-lg text-sm"
             >
-              Next
+              End Interview
             </Button>
-          )}
-        </div>
+          </Link>
+        ) : (
+          <Button
+            onClick={() => {
+              setActiveQuestionIndex(activeQuestionIndex + 1);
+              setRecorded(false);
+              setIsAnswerSaved(false);
+            }}
+            disabled={!recorded}
+            className="bg-black w-full text-white px-6 py-2 rounded-lg text-sm"
+          >
+            Next
+          </Button>
+        )}
       </div>
-    </>
+    </div>
   );
 }
 
 export default RecordAnswers;
-
-

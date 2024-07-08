@@ -67,7 +67,7 @@ function Header() {
         className="fixed shadow-lg top-0 left-0 w-full z-50 backdrop-blur-md border-b border-gray-300 "
       >
         <div className="container flex justify-between items-center px-8 py-4 m-auto">
-          <Link href={'/'}><h1 className="text-xl font-bold text-black">Mockstar.ai</h1></Link>
+          <Link href={'/'}><h1 className="text-xl font-bold text-black">Mock.ai</h1></Link>
           <nav className="hidden md:flex space-x-8 justify-between">
             <ul className="flex space-x-6 pt-1">
             <Link href={'/dashboard'}><li 
