@@ -36,10 +36,6 @@ const Accordion = () => {
       header: "What types of job positions can I create interviews for?",
       text: "You can create interviews for a wide range of job positions across various industries. Our AI is equipped to handle different roles and tailor questions based on the job description and required skills you provide.",
     },
-    // {
-    //   header: "Is my data secure on the platform?",
-    //   text: "Yes, we prioritize your data security. All your personal information, interview details, and recorded answers are stored securely and are only accessible to you. We comply with industry standards and regulations to ensure your data is protected.",
-    // },
   ];
 
   return (
@@ -67,25 +63,18 @@ const Accordion = () => {
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
             {questions.map((item, index) => (
-              // <AccordionItem
-              //   key={index}
-              //   header={item.header}
-              //   text={item.text}
-              // />
               <Collapsible
-                      key={index}
-                      className="bg-gradient-to-r from-gray-200 via-gray-100 to-gray-50 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-                    >
-                      <CollapsibleTrigger className="w-full text-sm font-bold text-left flex justify-between items-center">
-                        <span className="text-gray-800">{item.header}</span>
-                        <ChevronsUpDown className="w-6 h-6 text-purple-500" />
-                      </CollapsibleTrigger>
-                      <CollapsibleContent className="mt-4 space-y-4 text-sm">
-                        <p className="text-gray-500 text-xs">
-                        {item.text}
-                        </p>
-                      </CollapsibleContent>
-                    </Collapsible>
+                key={index}
+                className="bg-gradient-to-r from-gray-200 via-gray-100 to-gray-50 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+              >
+                <CollapsibleTrigger className="w-full gap-4 text-sm font-bold text-left flex justify-between items-center">
+                  <span className="text-gray-800 w-[90%]">{item.header}</span>
+                  <ChevronsUpDown className="w-[10%] text-purple-500" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-4 space-y-4 text-sm">
+                  <p className="text-gray-500 text-xs">{item.text}</p>
+                </CollapsibleContent>
+              </Collapsible>
             ))}
           </div>
         </div>
