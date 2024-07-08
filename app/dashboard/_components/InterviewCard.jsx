@@ -132,7 +132,7 @@ function InterviewCard({
               {capitalizeFirstLetter(title)}
             </CardTitle>
             <CardDescription className="text-sm text-gray-700">
-              {capitalizeFirstLetter(description)}
+              {capitalizeFirstLetter(description.trim().slice(0, 100) + "...")}
               <br />
               {yearsOfExp > 0
                 ? yearsOfExp === 1
