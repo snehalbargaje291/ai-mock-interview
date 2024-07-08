@@ -77,9 +77,9 @@ function Header() {
               >
                 Dashboard
               </li></Link>
-              <Link href={'/howitworks'}><li
+              <Link href={'/dashboard/howitworks'}><li
                 className={`${
-                  path == "/howitworks" && "text-gray-600 font-bold"
+                  path == "/dashboard/howitworks" && "text-gray-600 font-bold"
                 } text-black cursor-pointer text-sm hover:text-gray-400 hover:font-bold transition-all`}
               >
                 How it works?
