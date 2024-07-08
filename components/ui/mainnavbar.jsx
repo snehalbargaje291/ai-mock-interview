@@ -45,7 +45,7 @@ const MainNavbar = () => {
     >
       <Link href={"/"}>
         <h1 className="text-xl font-bold text-black cursor-pointer">
-          Mock.ai
+        InterviewIQ
         </h1>
       </Link>
       <div className="flex justify-center items-center flex-row gap-8">

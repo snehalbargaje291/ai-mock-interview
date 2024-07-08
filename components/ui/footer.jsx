@@ -81,7 +81,7 @@ function Footer() {
             </div>
         </div>
         <p className="text-sm leading-6 text-center bg-gray-900 text-white">
-          © 2024 MockAI, Inc. All rights reserved.
+          © 2024 InterviewIQ, Inc. All rights reserved.
         </p>
       </div>
     </div>
