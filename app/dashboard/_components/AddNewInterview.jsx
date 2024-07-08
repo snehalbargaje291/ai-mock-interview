@@ -48,7 +48,7 @@ function AddNewInterview() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const InputPrompt = `Based on the position of ${formData.position} with ${formData.experience} years of experience in ${formData.jobDescription}, provide ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTIONS_COUNT} appropriate and relevant interview questions along with their expected answers in JSON format. Each question and its corresponding answer should be included as fields in the JSON structure.`;
+    const InputPrompt = `You are preparing interview questions for a ${formData.position} with ${formData.experience} years of experience, focusing on ${formData.jobDescription}. Please provide ${process.env.NEXT_PUBLIC_INTERVIEW_QUESTIONS_COUNT} relevant interview questions along with their expected answers in JSON format. Include each question and its corresponding answer as fields in the JSON structure.`;
     const result = await chatSession.sendMessage(InputPrompt);
     const MockJsonResponse = result.response
       .text()

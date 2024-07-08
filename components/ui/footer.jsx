@@ -1,10 +1,10 @@
-import { motion, useInView } from "framer-motion";
+// import { motion, useInView } from "framer-motion";
 import React, { useRef } from "react";
 import { AnimatedTooltip } from "./animated-tooltip";
 
 function Footer() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: false });
+  // const inView = useInView(ref, { once: false });
   const tooltipItems = [
     {
       id: 1,
@@ -37,15 +37,7 @@ function Footer() {
   ];
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 50, scale: 0.95 }}
-      animate={
-        inView
-          ? { opacity: 1, y: 0, scale: 1 }
-          : { opacity: 0, y: 100, scale: 0.95 }
-      }
-      transition={{ duration: 0.8 }}
+    <div
       className="border-t-2 border-gray-300 bg-gray-200 bottom-0"
     >
       <div className="w-full space-y-4">
@@ -92,7 +84,7 @@ function Footer() {
           © 2024 MockAI, Inc. All rights reserved.
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
